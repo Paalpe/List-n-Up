@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import mapboxgl from 'mapbox-gl';
 	import 'mapbox-gl/dist/mapbox-gl.css';
+	import backgroundImage from '$lib/bigDesk.png';
 
 	let mapZoom = 0.1;
 
@@ -177,7 +178,6 @@
 
 		// // position of click on map
 		map.on('click', (e) => {
-
 			// fly to location
 			if (map.getZoom() < 1) {
 				map.scrollZoom.enable();
@@ -224,7 +224,6 @@
 			const newZoom = map.getZoom();
 			if (newZoom < 4) {
 				// toggle visibility of markerLayer
-				
 			}
 			mapZoom = newZoom;
 		});
@@ -254,9 +253,6 @@
 					emoji.style.fontSize = '30px';
 					emoji.style.marginTop = '-15px';
 
-					
-					
-
 					// add onclick event to the marker
 					emoji.onclick = () => {
 						console.log('clicked');
@@ -264,8 +260,6 @@
 
 					// Create a default Marker and add it to the map.
 					const marker1 = new mapboxgl.Marker(emoji).setLngLat([lng, lat]).addTo(map);
-
-					
 				}
 			}
 		}
@@ -306,30 +300,31 @@
 
 	<!-- Show this image /Users/paal/PanterDev/1svelte/List-n-Up/src/lib/desk.png -->
 	<!-- <Motion let:motion whileHover={{ scale: 1.02 }}> -->
-		{#if h!= 0}
-
-	<div style="background-image: url(src/lib/bigDesk.png); overflow-y: hidden;">
-		<img
-			src="src/lib/bigDesk.png"
-			alt="desk"
-			id="picture"
-			style="opacity:{1 - mapZoom / 3}; top: 50%;
+	{#if h != 0}
+		<div style="overflow-y: hidden;">
+			<img
+				src={backgroundImage}
+				alt="A desk with a globe on it. Books all around."
+				id="picture"
+				style="opacity:{1 - mapZoom / 3}; top: 50%;
 				overflow-y: hidden;
 			left: 50%;
 			transform: translate(-49%, -45%) scale({mapZoom * 0.56 + 0.52 + h * 0.0003});
 		
 			"
-		/>
-	</div>
+			/>
+		</div>
 	{/if}
 
 	<div bind:clientHeight={h} id="map" class="dark" />
 	<!-- </Motion> -->
 
-	 <div id="footer">
-		<p style="font-family: monospace; font-weight: 600; color: wheat;" >22. April 2022 - Pål Sørvik Pedersen - V.0.01</p>
+	<div id="footer">
+		<p style="font-family: monospace; font-weight: 600; color: wheat;">
+			22. April 2022 - Pål Sørvik Pedersen - V.0.01
+		</p>
 		<!-- <button class:active={userWantsToSearch} on:click={() => toggleSearch()}>Søk</button> -->
-	</div> 
+	</div>
 
 	<!--  add back arrow top left corner -->
 </body>
