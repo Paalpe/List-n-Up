@@ -1,5 +1,5 @@
 import { Client } from '@notionhq/client';
-import { NOTION_TOKEN } from '$env/static/private';
+import { NOTION_TOKEN, NOTION_MAIL_DB_ID } from '$env/static/private';
 
 export const load = async ({ params }) => {
  
@@ -9,7 +9,7 @@ export const load = async ({ params }) => {
 		});
 
 		const response = await notion.databases.query({
-			database_id: 'b43ad05caae746ca9c91f54e7eb24bb3'
+			database_id: NOTION_MAIL_DB_ID
 		});
 		return response;
     };

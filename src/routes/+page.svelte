@@ -240,9 +240,26 @@
 		for (const page of places.results) {
 			// if page has a property called Name
 			if (page.properties.coordinates.rich_text[0] != undefined) {
+				console.log(page.properties);
 				const title = page.properties.Name.title?.[0]?.plain_text ?? '';
 				const coordinates = page.properties.coordinates.rich_text?.[0]?.plain_text;
 				const icon = page.icon.emoji;
+
+				let Tags = [];
+
+				if (page.properties.Tags.multi_select != undefined) {
+					for (const tag of page.properties.Tags.multi_select) {
+						// Tags.push({ 'name: tag.name, color: tag.color' });
+						Tags.push(`
+						<div style = "">
+						<code class="tag" style="position: absolute; background-color: ${tag.color}; opacity:.3   ">${tag.name}</code>
+						<code class="tag" style=" position: absolute; background-color: transparent; color:${tag.color}; filter: brightness(75%);">${tag.name}</code>
+
+						</div>
+						`);
+					}
+				}
+
 				console.log(title);
 				if (title && coordinates) {
 					// split the coordinates into an array
@@ -255,11 +272,41 @@
 
 					// add onclick event to the marker
 					emoji.onclick = () => {
+						const _mapZoom = map.getZoom();
 						console.log('clicked');
+						emoji.textContent = '·';
+						userInteracting = true;
+						map.flyTo({
+							center: [lng, lat],
+							speed: 0.6,
+							curve: 1,
+							zoom: _mapZoom < 6.2 ? 6.2 : _mapZoom,
+							pitch: 0,
+							bearing: 0
+						});
 					};
 
 					// Create a default Marker and add it to the map.
-					const marker1 = new mapboxgl.Marker(emoji).setLngLat([lng, lat]).addTo(map);
+					const marker1 = new mapboxgl.Marker(emoji)
+						.setLngLat([lng, lat])
+						.setPopup(
+							new mapboxgl.Popup({ offset: 25, closeButton: false }) // add popups
+								.setHTML(
+									`<article style="margin:0; min-width: 150px;">
+									<h2 style="padding=0; marging=0;"> ${icon} </h2> <h4 style="padding-top=0; marging-top=0;"> ${title} </h4>
+									${Tags.join(' ')}
+									
+									</article>`
+									// Her står det noe!
+									// <code>🚀 Test</code> <code>🙊 Test</code>
+								)
+						)
+						.addTo(map);
+
+					marker1.getPopup().on('close', () => {
+						emoji.textContent = icon ?? '🏠';
+						userInteracting = false;
+					});
 				}
 			}
 		}
