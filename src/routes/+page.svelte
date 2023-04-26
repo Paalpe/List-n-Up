@@ -251,7 +251,7 @@
 					for (const tag of page.properties.Tags.multi_select) {
 						// Tags.push({ 'name: tag.name, color: tag.color' });
 						Tags.push(`
-						<div style = "">
+						<div style = "display:inline">
 						<code class="tag" style="position: absolute; background-color: ${tag.color}; opacity:.3   ">${tag.name}</code>
 						<code class="tag" style=" position: absolute; background-color: transparent; color:${tag.color}; filter: brightness(75%);">${tag.name}</code>
 
@@ -383,6 +383,7 @@
 		overflow: clip;
 		object-fit: contain;
 		overflow-y: hidden;
+		max-width: none;
 	}
 
 	#map {
